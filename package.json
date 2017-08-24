@@ -1,0 +1,25 @@
+{
+  "name": "threejs-sandbox-vanilla",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "scripts": {
+    "start": "webpack-dev-server",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbjw/threejs-sandbox-vanilla.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jbjw/threejs-sandbox-vanilla/issues"
+  },
+  "homepage": "https://github.com/jbjw/threejs-sandbox-vanilla#readme",
+  "devDependencies": {
+    "express": "^4.15.3"
+  }
+}
