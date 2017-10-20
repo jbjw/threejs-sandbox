@@ -23,12 +23,70 @@ const controls = new THREE.OrbitControls( camera )
 // controls.dampingFactor = 0.25;
 // controls.enableRotate = false;
 
-let sphere = new THREE.Mesh(
-	new THREE.SphereGeometry( 5, 32, 32 ),
-	new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true, side: THREE.DoubleSide } ),
-)
-sphere.position.set( 0, 10, 0 )
-scene.add( sphere )
+var keyboardState = {}
+
+document.addEventListener("keypress", function (e) {
+	console.log(e.key)
+})
+
+document.addEventListener("keydown", function (e) {
+	keyboardState[e.key] = true
+})
+
+document.addEventListener("keyup", function (e) {
+	keyboardState[e.key] = false
+	// console.log(keyboardState)
+})
+
+let objects = []
+function Ship() {
+	objects.push(this)
+
+
+	this.velocity = new THREE.Vector3(0, 0.01, 0)
+
+	// sphere.position.set( 0, 10, 0 )
+
+	this.mesh = new THREE.Mesh(
+		// new THREE.SphereGeometry( 5, 32, 32 ),
+		new THREE.BoxGeometry( 4, 4, 1, 1 ),
+		new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true, side: THREE.DoubleSide } ),
+	)
+
+	scene.add(this.mesh)
+
+	this.update = function () {
+		if (keyboardState["a"]) {
+			this.velocity.x += 0.001
+		}
+		if (keyboardState["d"]) {
+			this.velocity.x += -0.001
+		}
+		if (keyboardState["w"]) {
+			this.velocity.z += 0.001
+		}
+		if (keyboardState["s"]) {
+			this.velocity.z += -0.001
+		}
+		if (keyboardState["r"]) {
+			this.velocity.y += 0.001
+		}
+		if (keyboardState["f"]) {
+			this.velocity.y += -0.001
+		}
+		if (keyboardState[" "]) {
+			this.velocity.set(0, 0, 0)
+		}
+
+		// console.log('update')
+		this.mesh.position.add(this.velocity)
+		// this.mesh.position.set(this.mesh.position.add(this.velocity))
+	}
+}
+
+var ship = new Ship()
+
+
 
 var plane = new THREE.Mesh(
 	new THREE.PlaneGeometry( 10, 10, 10, 10 ),
@@ -44,13 +102,20 @@ scene.add( axisHelper )
 var gridHelper = new THREE.GridHelper( 100, 0.1 )
 scene.add( gridHelper )
 
+function update() {
+	for ( let object of objects ) {
+		object.update()
+	}
+}
+setInterval(update, 10)
+
 function render() {
 	requestAnimationFrame( render )
 	renderer.render( scene, camera )
 	controls.update()
-	sphere.position.y += 0.01
-	// camera.rotation.x = camera.rotation.x + 0.0001
-	// console.log('what')
+	for ( let objet of objects ) {
+		// object.update()
+	}
 }
 requestAnimationFrame( render )
 
