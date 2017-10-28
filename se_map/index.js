@@ -5,6 +5,7 @@
 var keyboardState = {}
 
 document.addEventListener("keypress", function (e) {
+	console.log("key pressed")
 	console.log(e.key)
 })
 
@@ -17,16 +18,27 @@ document.addEventListener("keyup", function (e) {
 	// console.log(keyboardState)
 })
 
+function randomColor() {
+	return new THREE.Color(`rgb(${randint(0,255)}, ${randint(0,255)}, ${randint(0,255)})`)
+}
+
+function chooseColor() {
+	var colors = [
+		new THREE.Color("rgb(100, 100, 100)"),
+		new THREE.Color("rgb(150, 0, 0)"),
+		new THREE.Color("rgb(0, 150, 0)"),
+		new THREE.Color("rgb(0, 0, 150)"),
+	]
+	return colors.choose()
+}
+
 // var myImageData = ctx.createImageData(textureCanvas.width, textureCanvas.height) // blank
 
 // var myImageData = ctx.getImageData(left, top, width, height) // copy
 
 // ctx.putImageData(myImageData, 0, 0) // set
 
-
-
 var skyboxCanvas = document.createElement("canvas")
-// document.body.appendChild(skyboxCanvas)
 var ctx = skyboxCanvas.getContext("2d")
 
 var skyboxWidth = 8192
@@ -37,7 +49,7 @@ skyboxCanvas.width = skyboxWidth
 skyboxCanvas.height = skyboxHeight
 
 const scene = new THREE.Scene()
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 100000 )
+const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 100000 )
 // const camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, -10, 1000 )
 scene.add(camera)
 camera.position.set( 5, 3, 5 )
@@ -45,6 +57,47 @@ camera.position.set( 5, 3, 5 )
 const renderer = new THREE.WebGLRenderer()
 renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
+
+// document.addEventListener("click", function () {
+// 	document.documentElement.webkitRequestFullscreen()
+// })
+
+document.addEventListener("webkitfullscreenchange", function () {
+	console.log("webkitfullscreenchange")
+})
+document.addEventListener("mozfullscreenchange", function () {
+	console.log("mozfullscreenchange")
+})
+document.addEventListener("fullscreenchange", function () {
+	console.log("fullscreenchange")
+})
+
+document.addEventListener("webkitfullscreenchange", function () {
+	if (!document.webkitFullscreenElement) {
+		fullscreenButton.style.display = "block"
+	} else {
+		fullscreenButton.style.display = "none"
+	}
+})
+
+function toggleFullScreen() {
+	if (!document.webkitFullscreenElement) {
+		document.documentElement.webkitRequestFullscreen()
+	} else {
+		document.webkitExitFullscreen()
+	}
+}
+
+var fullscreenButton = document.querySelector("#fullscreen-button")
+fullscreenButton.addEventListener("click", function () {
+	toggleFullScreen()
+})
+
+// console.log(window.getComputedStyle(fullscreenButton, null))
+// webkitRequestFullScreen
+// mozRequestFullScreen
+
+// renderer.domElement.requestFullscreen()
 
 const controls = new THREE.OrbitControls(camera)
 // // controls.enablePan = false;
@@ -64,9 +117,7 @@ const controls = new THREE.OrbitControls(camera)
 
 // void ctx.ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise);
 
-function getRandomArbitrary(min, max) {
-  return Math.random() * (max - min) + min;
-}
+function getRandomArbitrary(min, max) { return Math.random() * (max - min) + min }
 
 function randint(min, max) {
   min = Math.ceil(min);
@@ -76,15 +127,14 @@ function randint(min, max) {
 
 // choose and weighted choose
 
-Array.prototype.choose = function () {
-	return this[Math.floor(Math.random() * this.length)]
-}
+// ctx.fillRect(5, 5, 400, 400)
+
+Array.prototype.choose = function () { return this[Math.floor(Math.random() * this.length)] }
 
 var colors = ["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#CCFFFF", "#CCCCFF", "#FFCCCC"]
 // var colors = ["#AAAAAA"]
 var weights = [0.9, 0.4, 0.4, 0.4]
 
-console.log(colors.choose())
 for (let i = 0; i < 1000; i++) {
 	ctx.beginPath()
 	ctx.ellipse(randint(0, skyboxWidth), randint(0, skyboxHeight), randint(1, 5), randint(1, 5), 45 * Math.PI*2/360, 0, 2 * Math.PI)
@@ -92,15 +142,13 @@ for (let i = 0; i < 1000; i++) {
 	ctx.fill()
 }
 
-// ctx.fillRect(5, 5, 400, 400)
-
 var skyboxTexture = new THREE.CanvasTexture(skyboxCanvas)
 
 var texture = new THREE.Texture(skyboxCanvas)
 texture.needsUpdate = true
 
 var skybox = new THREE.Mesh(
-	new THREE.SphereGeometry(100, 32, 32),
+	new THREE.SphereGeometry(1000, 32, 32),
 	// color: 0x00ff00,
 	new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide}),
 	// new THREE.MeshBasicMaterial({map: skyboxTexture,  wireframe: false, side: THREE.DoubleSide}),
@@ -120,13 +168,42 @@ function parseCoords(coords) {
 var originCoords = "GPS:Station GTH Jump:-2915598:-1165400.62:5543982:"
 var originVec = parseCoords(originCoords)
 
+var scale = 1/1000000
+
 function convertCoords(vec) {
 	var newVec = new THREE.Vector3()
 	newVec.copy(vec)
 	newVec.sub(originVec)
-	var scale = 0.00001
+
 	newVec.multiplyScalar(scale)
 	return newVec
+}
+
+function Label(args) {
+	var canvas = document.createElement("canvas")
+	canvas.width = 256
+	canvas.height = 256
+	// document.body.appendChild(canvas)
+	var ctx = canvas.getContext("2d")
+
+	ctx.font = "48px serif";
+
+	ctx.fillStyle = "rgba(255, 0, 0, 0.5)"
+	ctx.fillRect(0, 0, 256, 256/4)
+
+	// ctx.fillStyle = "blue";
+
+	ctx.fillStyle = "green";
+	ctx.textAlign = "center"
+	ctx.textBaseline = "middle"
+	ctx.fillText(args.text, 256/2, 256/8)
+
+	// var spriteMap = new THREE.TextureLoader().load( "../assets/textures/crate.jpg" );
+
+	var spriteMap = new THREE.Texture(canvas)
+	spriteMap.needsUpdate = true
+	var spriteMaterial = new THREE.SpriteMaterial({ map: spriteMap, color: 0xffffff });
+	this.sprite = new THREE.Sprite(spriteMaterial)
 }
 
 function Body(args) {
@@ -136,10 +213,21 @@ function Body(args) {
 		new THREE.MeshBasicMaterial({color: args.color, wireframe: false, side: THREE.DoubleSide}),
 		// new THREE.MeshBasicMaterial( { color: 0x00aa00, wireframe: false, side: THREE.DoubleSide } ),
 	)
-	console.log(convertCoords(parseCoords(args.coords)))
-	this.mesh.position.copy(convertCoords(parseCoords(args.coords)))
 
+	this.mesh.position.copy(convertCoords(parseCoords(args.coords)))
 	scene.add(this.mesh)
+
+	this.label = new Label({
+		text: args.name,
+	})
+	scene.add(this.label.sprite)
+
+	this.label.sprite.position.addVectors(this.mesh.position, new THREE.Vector3(0, 0, 0))
+
+	// this.group = new THREE.Group()
+	// this.group.add( this.mesh );
+	// this.group.add( this.label );
+	// scene.add( this.group );
 
 	this.update = function () {
 
@@ -148,12 +236,20 @@ function Body(args) {
 
 function Station(args) {
 	this.mesh = new THREE.Mesh(
-		// new THREE.SphereGeometry( args.radius, 32, 32 ),
-		new THREE.BoxGeometry( 1, 1, 1, 1 ),
+		new THREE.SphereGeometry( args.radius, 32, 32 ),
+		// new THREE.BoxGeometry( 0.1, 0.1, 0.1 ),
 		new THREE.MeshBasicMaterial( { color: 0xaaaaaa, wireframe: false, side: THREE.DoubleSide } ),
 	)
 
+	this.mesh.position.copy(convertCoords(parseCoords(args.coords)))
 	scene.add(this.mesh)
+
+	this.label = new Label({
+		text: args.name,
+	})
+	scene.add(this.label.sprite)
+
+	this.label.sprite.position.addVectors(this.mesh.position, new THREE.Vector3(0, 0, 0))
 
 	this.update = function () {
 
@@ -184,45 +280,68 @@ function Ship(args) {
 // 	coords: "GPS:Fe Pt Ice:-2917763.75:-1152106:5565901.5:",
 // })
 
-var betterBodies = [
-	{
-		name: "Binoi",
-		category: "planet",
-		coords: "GPS:Planet Binoi:126564.39:35734.37:136920.58:",
-		color: new THREE.Color("rgb(100, 100, 100)"),
-		size: 10000,
-	}
-]
+// var geometry = new THREE.BoxGeometry( 1, 1, 1 )
+//
+// var material = new THREE.LineDashedMaterial({
+// 	color: randomColor(),
+// 	linewidth: 1,
+// 	scale: 1,
+// 	dashSize: 0.1,
+// 	gapSize: 0.05,
+// })
+// geometry.computeLineDistances();
+// var line = new THREE.Line(geometry, material)
+// scene.add(line)
 
-var planetCoords = [
-	"GPS:Planet Binoi:126564.39:35734.37:136920.58:",
-	"GPS:Planet Erunt:-1968765.88:-225323.61:5415210:",
-	"GPS:Planet Fenyur:90037.2:17461.35:169259.89:",
-	"GPS:Planet Lenat:-4058216:-1470660.88:7261757:",
-	"GPS:Planet Mex:1089272.12:309622.72:-1527844.25:",
-	"GPS:Planet Ravcor:2013801.75:344675.25:-4041406:",
-	"GPS:Planet Raxum:1005989.38:395656.31:-1490926.88:",
-	"GPS:Planet Uintonn:-2931954.5:-1135241.62:4766915:",
-	"GPS:Planet Urna:-1425300.88:-256830.09:2298131.5:",
-	"GPS:Planet Zemok:2945782.5:460980.78:-5288015.5:",
-]
-
-function randomColor() {
-	var colors = [
-		new THREE.Color("rgb(100, 100, 100)"),
-		new THREE.Color("rgb(150, 0, 0)"),
-		new THREE.Color("rgb(0, 150, 0)"),
-		new THREE.Color("rgb(0, 0, 150)"),
-	]
-	return colors.choose()
-}
-for (let coords of planetCoords) {
-	var x = new Body({
-		color: randomColor(),
-		radius: randint(1, 5),
-		coords: coords,
+for (let body of bodies) {
+	var tmp = new Body({
+		color: new THREE.Color(body.color),
+		radius: body.radius*scale,
+		coords: body.coords,
+		name: body.name,
 	})
-	objects.push(x)
+
+	if (body.category == "moon") {
+		// var material = new THREE.LineBasicMaterial({
+		// 	color: 0x0000ff
+		// });
+		// var material = new THREE.LineBasicMaterial({
+		// 	// color: 0xffffff,
+		// 	color: randomColor(),
+		// 	linewidth: 10,
+		// })
+		var material = new THREE.LineDashedMaterial({
+			color: randomColor(),
+			linewidth: 10,
+			scale: 1,
+			dashSize: 0.1,
+			gapSize: 0.025,
+		})
+
+		var geometry = new THREE.Geometry()
+
+		var orbitBody = bodies.find(e => e.name == body.orbits)
+
+		geometry.vertices.push(
+			convertCoords(parseCoords(body.coords)),
+			convertCoords(parseCoords(orbitBody.coords)),
+		)
+		geometry.computeLineDistances()
+
+		var line = new THREE.Line( geometry, material );
+		scene.add( line )
+	}
+	objects.push(tmp)
+}
+
+for (let station of stations) {
+	var tmp = new Station({
+		color: chooseColor(),
+		radius: station.radius*scale,
+		coords: station.coords,
+		name: station.tag,
+	})
+	objects.push(tmp)
 }
 
 // var mars = new Body({
@@ -234,7 +353,7 @@ for (let coords of planetCoords) {
 
 // var plane = new THREE.Mesh(
 // 	new THREE.PlaneGeometry( 10, 10, 10, 10 ),
-// 	new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true, side: THREE.DoubleSide } ),
+// 	new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true, side: THREE.DoubleSide }),
 // )
 // scene.add( plane )
 // plane.rotation.x = Math.PI/2

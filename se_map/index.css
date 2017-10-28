@@ -1,0 +1,45 @@
+body:-moz-full-screen {
+	background-color: pink;
+}
+
+body:-webkit-full-screen {
+	background-color: pink;
+}
+
+body:fullscreen {
+	background-color: pink;
+}
+
+
+html {
+	height: 100%;
+}
+body {
+	margin: 0;
+	overflow: hidden;
+}
+
+#fullscreen-button {
+	/*background-color: pink;*/
+	position: absolute;
+	width: 200px;
+	height: 40px;
+	top: 10px;
+	left: 10px;
+}
+
+#fullscreen-button:-webkit-full-screen {
+	width: 50px;
+}
+
+button:-moz-full-screen {
+  background-color: pink;
+}
+
+button:-webkit-full-screen {
+  background-color: pink;
+}
+
+button:fullscreen {
+  background-color: pink;
+}
