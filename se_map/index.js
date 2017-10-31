@@ -148,7 +148,7 @@ var texture = new THREE.Texture(skyboxCanvas)
 texture.needsUpdate = true
 
 var skybox = new THREE.Mesh(
-	new THREE.SphereGeometry(1000, 32, 32),
+	new THREE.SphereGeometry(10000, 32, 32),
 	// color: 0x00ff00,
 	new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide}),
 	// new THREE.MeshBasicMaterial({map: skyboxTexture,  wireframe: false, side: THREE.DoubleSide}),
@@ -196,7 +196,7 @@ function Label(args) {
 	ctx.fillStyle = "green";
 	ctx.textAlign = "center"
 	ctx.textBaseline = "middle"
-	ctx.fillText(args.text, 256/2, 256/8)
+	ctx.fillText(args.text, 256/2, 256/2)
 
 	// var spriteMap = new THREE.TextureLoader().load( "../assets/textures/crate.jpg" );
 
