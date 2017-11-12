@@ -18,6 +18,12 @@ document.addEventListener("keyup", function (e) {
 	// console.log(keyboardState)
 })
 
+function randint(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
+}
+
 function randomColor() {
 	return new THREE.Color(`rgb(${randint(0,255)}, ${randint(0,255)}, ${randint(0,255)})`)
 }
@@ -119,11 +125,7 @@ const controls = new THREE.OrbitControls(camera)
 
 function getRandomArbitrary(min, max) { return Math.random() * (max - min) + min }
 
-function randint(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
-}
+
 
 // choose and weighted choose
 
