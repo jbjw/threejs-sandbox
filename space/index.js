@@ -86,8 +86,6 @@ function Ship() {
 
 var ship = new Ship()
 
-
-
 var plane = new THREE.Mesh(
 	new THREE.PlaneGeometry( 10, 10, 10, 10 ),
 	new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true, side: THREE.DoubleSide } ),
