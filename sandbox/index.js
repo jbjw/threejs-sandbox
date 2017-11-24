@@ -18,6 +18,8 @@ const camera = new THREE.PerspectiveCamera( FOV, ASPECT_RATIO, NEAR, FAR )
 scene.add( camera )
 // const camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, -10, 1000 );
 
+const PI = Math.PI
+
 const renderer = new THREE.WebGLRenderer()
 renderer.setSize( WIDTH, HEIGHT )
 document.body.appendChild( renderer.domElement )
@@ -68,17 +70,17 @@ const controls = new THREE.OrbitControls(camera);
 const textures = {}
 const materials = {}
 
-const dirtTexture = THREE.ImageUtils.loadTexture( 'assets/textures/stone.jpg' )
+const dirtTexture = THREE.ImageUtils.loadTexture( '../assets/textures/stone.jpg' )
 dirtTexture.anisotropy = renderer.getMaxAnisotropy()
-const dirtMaterial = new THREE.MeshBasicMaterial( { map: dirtTexture, side: THREE.DoubleSide } )
+const dirtMaterial = new THREE.MeshLambertMaterial( { map: dirtTexture, side: THREE.DoubleSide } )
 
-const woodTexture = THREE.ImageUtils.loadTexture( 'assets/textures/crate.jpg' )
+const woodTexture = THREE.ImageUtils.loadTexture( '../assets/textures/crate.jpg' )
 woodTexture.anisotropy = renderer.getMaxAnisotropy()
-const woodMaterial = new THREE.MeshBasicMaterial( { map: woodTexture, side: THREE.DoubleSide } )
+const woodMaterial = new THREE.MeshLambertMaterial( { map: woodTexture, side: THREE.DoubleSide } )
 
-const grassTexture = THREE.ImageUtils.loadTexture( 'assets/textures/grass.jpg' )
+const grassTexture = THREE.ImageUtils.loadTexture( '../assets/textures/grass.jpg' )
 grassTexture.anisotropy = renderer.getMaxAnisotropy()
-const grassMaterial = new THREE.MeshBasicMaterial( { map: grassTexture, side: THREE.DoubleSide } )
+const grassMaterial = new THREE.MeshLambertMaterial( { map: grassTexture, side: THREE.DoubleSide } )
 
 const shaderMaterial = new THREE.ShaderMaterial( {
   vertexShader: document.getElementById( 'vertexShader' ).textContent,
@@ -182,7 +184,51 @@ var plane = new THREE.Mesh(
 	grassMaterial,
 )
 scene.add( plane )
-plane.rotation.x = Math.PI/2
+plane.rotation.x = PI/2
+
+
+
+// white spotlight shining from the side, casting a shadow
+
+var spotlight = new THREE.SpotLight( 0xff0000, 0.1 )
+
+spotlight.position.set( 0, 800, 0 )
+
+spotlight.intensity = 10
+spotlight.angle = PI/16
+spotlight.distance = 1000
+spotlight.decay = 2
+
+scene.add( spotlight )
+
+// spotlight.target = players[0].mesh
+// spotlight.target.
+
+// spotlight.castShadow = true;
+//
+// spotlight.shadow.mapSize.width = 1024;
+// spotlight.shadow.mapSize.height = 1024;
+//
+// spotlight.shadow.camera.near = 500;
+// spotlight.shadow.camera.far = 4000;
+// spotlight.shadow.camera.fov = 30;
+
+
+
+// console.log(spotlight)
+var spotLightHelper = new THREE.SpotLightHelper( spotlight )
+scene.add( spotLightHelper )
+
+var light = new THREE.AmbientLight( 0x404040, 1 )
+
+// var light = new THREE.AmbientLight( {
+// 	color: 0xFF0000,
+// 	// color: 0x404040,
+// 	intensity: 0.1,
+// } )
+
+scene.add( light )
+
 
 // THREE.Vector3( x, y, z );
 // THREE.Euler( x, y, z );
