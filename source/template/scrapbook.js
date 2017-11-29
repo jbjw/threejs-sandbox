@@ -1,3 +1,42 @@
+var options = {
+	start: new THREE.Vector2( -10, -10 ),
+	end: new THREE.Vector2( 10, 10 ),
+	subdivisions: new THREE.Vector2( 29, 15 ),
+}
+
+console.log( flattenArray( [ [1, 2], [3, 4], ['a', 'x'] ]))
+function flattenArray( arr ) {
+	let newArr = []
+	for ( let a of arr ) {
+		for ( let b of a ) {
+			newArr.push( b )
+		}
+	}
+}
+
+function genPlane( options ) {
+	let vertices = []
+	const xDelta = options.end.x - options.start.x
+	const xSpacing = xDelta / options.subdivisions.x
+	const yDelta = options.end.y - options.start.y
+	const ySpacing = yDelta / options.subdivisions.y
+
+	for ( let x = 0; x < options.subdivisions.x; x++ ) {
+		for ( let y = 0; y < options.subdivisions.y; y++ ) {
+			//
+		}
+	}
+}
+
+for ( let vertex of plane.geometry.vertices ) {
+	console.log(vertex)
+	// const x = (Math.random()*100)-(100/2)
+	// const y = (Math.random()*100)-(100/2)
+	// const z =
+	// vertex.z = (Math.random()*1)-1
+	// vertex.set( x, y, 0 )
+}
+
 var FizzyText = function() {
   this.message = 'dat.gui';
   this.speed = 0.8;

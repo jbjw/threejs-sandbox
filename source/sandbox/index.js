@@ -1,35 +1,37 @@
-//
+// Three.js Template
 
-'use strict';
+'use strict'
 
 var stats = new Stats()
 stats.showPanel( 1 ) // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild( stats.dom )
 
-const WIDTH = window.innerWidth
-const HEIGHT = window.innerHeight
-const FOV = 75
-const ASPECT_RATIO = WIDTH / HEIGHT
-const NEAR = 0.1
-const FAR = 100000
-
-const scene = new THREE.Scene()
-const camera = new THREE.PerspectiveCamera( FOV, ASPECT_RATIO, NEAR, FAR )
-scene.add( camera )
-// const camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, -10, 1000 );
-
 const PI = Math.PI
 
+const width = window.innerWidth
+const height = window.innerHeight
+const fov = 75
+const aspect = width / height
+const near = 0.1
+const far = 100000
+
 const renderer = new THREE.WebGLRenderer()
-renderer.setSize( WIDTH, HEIGHT )
+// renderer.setSize( window.innerWidth, window.innerHeight )
+renderer.setSize( width, height )
 document.body.appendChild( renderer.domElement )
+// renderer.setClearColor( "#AA00AA", 0.5 )
 
-camera.position.set( 0, 5, 5 )
-// camera.zoom = 10
-// camera.fov = 180
+const scene = new THREE.Scene()
+const camera = new THREE.PerspectiveCamera( fov, aspect, near, far )
+// const camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, -10, 1000 );
+scene.add( camera )
+// camera.fov = 120
+// camera.aspect = window.innerWidth / window.innerHeight
+// camera.near = 0.1
+// camera.far = 100000
+// camera.updateProjectionMatrix()
+camera.position.set( 1, 1, 1 )
 // .focus,.fov, .zoom
-
-// camera.rotation.x = Math.PI/2
 
 // const controls = new THREE.PointerLockControls( camera );
 // scene.add( controls.getObject() );
@@ -70,53 +72,53 @@ const controls = new THREE.OrbitControls(camera);
 const textures = {}
 const materials = {}
 
-const dirtTexture = THREE.ImageUtils.loadTexture( '../assets/textures/stone.jpg' )
+// var texture = new THREE.TextureLoader().load( '../../assets/textures/wood.jpg' )
+// const grassTexture = THREE.ImageUtils.loadTexture( "../../assets/textures/grass.jpg" )
+
+const dirtTexture = new THREE.TextureLoader().load( '../../assets/textures/dirt.jpg' )
 dirtTexture.anisotropy = renderer.getMaxAnisotropy()
-const dirtMaterial = new THREE.MeshLambertMaterial( { map: dirtTexture, side: THREE.DoubleSide } )
+const dirtMaterial = new THREE.MeshBasicMaterial( { map: dirtTexture, side: THREE.DoubleSide } )
 
-const woodTexture = THREE.ImageUtils.loadTexture( '../assets/textures/crate.jpg' )
+const woodTexture = new THREE.TextureLoader().load( '../../assets/textures/wood.jpg' )
 woodTexture.anisotropy = renderer.getMaxAnisotropy()
-const woodMaterial = new THREE.MeshLambertMaterial( { map: woodTexture, side: THREE.DoubleSide } )
+const woodMaterial = new THREE.MeshBasicMaterial( { map: woodTexture, side: THREE.DoubleSide } )
 
-const grassTexture = THREE.ImageUtils.loadTexture( '../assets/textures/grass.jpg' )
+const grassTexture = new THREE.TextureLoader().load( '../../assets/textures/grass.jpg' )
 grassTexture.anisotropy = renderer.getMaxAnisotropy()
-const grassMaterial = new THREE.MeshLambertMaterial( { map: grassTexture, side: THREE.DoubleSide } )
+const grassMaterial = new THREE.MeshBasicMaterial( { map: grassTexture, side: THREE.DoubleSide } )
 
-const shaderMaterial = new THREE.ShaderMaterial( {
-  vertexShader: document.getElementById( 'vertexShader' ).textContent,
-  fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
-} );
+// const shaderMaterial = new THREE.ShaderMaterial( {
+// 	vertexShader: document.getElementById( 'vertexShader' ).textContent,
+// 	fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+// } )
 
 // new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true, side: THREE.DoubleSide } )
 
-function Sphere() {
-	this.mesh = new THREE.Mesh(
-		new THREE.SphereGeometry( 5, 32, 32 ),
-		shaderMaterial,
-	)
-}
+// new THREE.Mesh(
+// 	new THREE.SphereGeometry( 5, 32, 32 ),
+// 	shaderMaterial,
+// )
+//
+// new THREE.Mesh(
+// 	new THREE.BoxGeometry( 1, 1, 1 ),
+// 	new THREE.MeshBasicMaterial().copy( materialTemplate )
+// )
 
-function Cube() {
-	this.mesh = new THREE.Mesh(
-		new THREE.BoxGeometry( 1, 1, 1 ),
-		woodMaterial
-	)
-}
-
-let sphere = new Sphere()
-sphere.mesh.position.set( 0, 10, 0 )
-scene.add( sphere.mesh )
-// const cube = new Cube()
-// scene.add( cube )
+// const tmp = new THREE.Mesh(
+// 	new THREE.BoxGeometry( 10, 10, 10 ),
+// 	new THREE.MeshBasicMaterial().copy( woodMaterial )
+// )
+// scene.add( tmp )
+// tmp.position.set( i*2, 0.5, j*2 )
 
 for ( let i = 0; i < 10; i++ ) {
-	// console.log('t')
 	for ( let j = 0; j < 10; j++ ) {
-		let x = new Cube()
-		let mesh = x.mesh
-		// console.log('t')
-		scene.add( mesh )
-		mesh.position.set( i*2, 0.5, j*2 )
+		const tmp = new THREE.Mesh(
+			new THREE.BoxGeometry( 1, 1, 1 ),
+			new THREE.MeshBasicMaterial().copy( woodMaterial )
+		)
+		scene.add( tmp )
+		tmp.position.set( i*2, 0.5, j*2 )
 	}
 }
 
@@ -136,6 +138,7 @@ var guiParams = {
 //   preset: 'Flow'
 // });
 var gui = new dat.GUI( { load: presets } )
+// var gui = new dat.GUI()
 var guiColor = gui.addColor( guiParams, 'color' )
 gui.remember( guiParams )
 
@@ -169,35 +172,118 @@ camGuiFOV.onChange( function () {
 //   alert("The new value is " + value);
 // });
 
-var skySphere = new THREE.Mesh(
+var raycaster = new THREE.Raycaster()
+var mouse = new THREE.Vector2()
+
+renderer.domElement.addEventListener( 'click', function ( event ) {
+	mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1
+	mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1
+
+	raycaster.setFromCamera( mouse, camera )
+
+	// var objects = scene.children
+	var objects = [ ground.mesh, ]
+	var intersections = raycaster.intersectObjects( objects, true )
+	// console.log( intersections )
+
+	for ( let intersection of intersections ) {
+
+	}
+	if ( intersections.length > 0 ) {
+		// console.log( "more den one" )
+		const obj = intersections[0].object.wrapper
+		obj.blink( 0xff0000 )
+		console.log("test")
+		// intersections[ 0 ].object.material.color.set( 0xff0000 )
+		// scene.remove( intersections[ 0 ].object )
+
+	}
+
+	// for ( var i = 0; i < intersections.length; i++ ) {
+	// 	intersections[ i ].object.material.color.set( 0xff0000 );
+	// }
+} )
+
+let cursorSphere = new THREE.Mesh(
+	new THREE.SphereGeometry( 1, 32, 32 ),
+	new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true, side: THREE.DoubleSide } ),
+)
+cursorSphere.position.set( 0, 10, 0 )
+scene.add( cursorSphere )
+
+// skybox
+var skybox = new THREE.Mesh(
 	new THREE.SphereGeometry( 1000, 32, 32 ),
 	new THREE.MeshBasicMaterial( {
-		map: THREE.ImageUtils.loadTexture('assets/360images/forest.jpg'),
+		map: new THREE.TextureLoader().load('../../assets/360images/painted.jpg'),
 		side: THREE.FrontSide, // was backside
 	} )
 )
-skySphere.scale.x = -1 // was not here
-scene.add( skySphere );
+skybox.scale.x = -1 // inverting, just render differently?
+scene.add( skybox )
 
-var plane = new THREE.Mesh(
-	new THREE.PlaneGeometry( 10, 10, 10, 10 ),
-	grassMaterial,
-)
-scene.add( plane )
-plane.rotation.x = PI/2
+// ground plane
 
+const objects = []
 
+function Ground() {
+	this.mesh = new THREE.Mesh(
+		new THREE.PlaneGeometry( 10, 10, 32, 32 ),
+		grassMaterial,
+	)
+	this.mesh.material.color = new THREE.Color( 0x123456 )
+	this.mesh.rotation.x = Math.PI/2
+	this.mesh.wrapper = this
+	scene.add( this.mesh )
+	objects.push( this )
 
-// white spotlight shining from the side, casting a shadow
+	this.blinkTimerInitial = 60
+	this.origColor = this.mesh.material.color.clone()
+	this.blink = function ( color ) {
+		this.blinking = true
+		this.newColor = new THREE.Color( color )
+		this.mesh.material.color.copy( this.newColor )
+		this.blinkTimer = this.blinkTimerInitial
+	}
+	this.render = function () {
+		if ( this.blinking ) {
+			this.blinkTimer -= 1
+			if ( this.blinkTimer === 0 ) {
+				console.log("fin")
+				this.blinking = false
+				this.mesh.material.color.set( this.origColor )
+			} else {
+				var t = this.blinkTimer / this.blinkTimerInitial // 1 just started 0 finished
+				console.log( 1 - t )
 
+				this.mesh.material.color.copy( this.newColor.lerp( this.origColor, 0.1 ) )
+				console.log(  )
+			}
+		}
+	}
+}
+var ground = new Ground()
+
+// line curve point
+
+var axisHelper = new THREE.AxisHelper( 5 )
+scene.add( axisHelper )
+console.log( axisHelper.uuid )
+
+// colorCenterLine, colorGrid
+var gridHelper = new THREE.GridHelper( 100, 0.1 )
+scene.add( gridHelper )
+console.log( gridHelper.uuid )
+
+// lighting
 var spotlight = new THREE.SpotLight( 0xff0000, 0.1 )
 
-spotlight.position.set( 0, 800, 0 )
+spotlight.position.set( 0, 100, 0 )
 
 spotlight.intensity = 10
-spotlight.angle = PI/16
+spotlight.angle = PI/256
 spotlight.distance = 1000
-spotlight.decay = 2
+spotlight.decay = 0
 
 scene.add( spotlight )
 
@@ -213,11 +299,9 @@ scene.add( spotlight )
 // spotlight.shadow.camera.far = 4000;
 // spotlight.shadow.camera.fov = 30;
 
-
-
-// console.log(spotlight)
-var spotLightHelper = new THREE.SpotLightHelper( spotlight )
-scene.add( spotLightHelper )
+// var spotLightHelper = new THREE.SpotLightHelper( spotlight )
+// scene.add( spotLightHelper )
+// console.log(spotLightHelper.uuid)
 
 var light = new THREE.AmbientLight( 0x404040, 1 )
 
@@ -229,116 +313,35 @@ var light = new THREE.AmbientLight( 0x404040, 1 )
 
 scene.add( light )
 
-
-// THREE.Vector3( x, y, z );
-// THREE.Euler( x, y, z );
-// position, rotation, scale
-
-// camera.position = new THREE.Vector3(10, 10, 5);
-//camera.setRotationFromEuler(new THREE.Euler(1, 1, 1));
-//camera.lookAt(cube);
-// camera.rotation = new THREE.Euler(0, 0, 0);
-// line curve point
-
-var axisHelper = new THREE.AxisHelper( 5 )
-scene.add( axisHelper )
-
-// colorCenterLine, colorGrid
-var gridHelper = new THREE.GridHelper( 100, 0.1 )
-scene.add( gridHelper )
-
-const speed = 0.01;
-
-const xGrow = 0.02;
-const yGrow = 0.01;
-
 let tick = 0
-
-// console.log(plane.geometry.vertices[0])
-
-var options = {
-	start: new THREE.Vector2( -10, -10 ),
-	end: new THREE.Vector2( 10, 10 ),
-	subdivisions: new THREE.Vector2( 29, 15 ),
-}
-
-console.log( flattenArray( [ [1, 2], [3, 4], ['a', 'x'] ]))
-function flattenArray( arr ) {
-	let newArr = []
-	for ( let a of arr ) {
-		for ( let b of a ) {
-			newArr.push( b )
-		}
-	}
-}
-
-function genPlane( options ) {
-	let vertices = []
-	const xDelta = options.end.x - options.start.x
-	const xSpacing = xDelta / options.subdivisions.x
-	const yDelta = options.end.y - options.start.y
-	const ySpacing = yDelta / options.subdivisions.y
-
-
-
-	for ( let x = 0; x < options.subdivisions.x; x++ ) {
-		for ( let y = 0; y < options.subdivisions.y; y++ ) {
-			//
-		}
-	}
-
-}
-
-for ( let vertex of plane.geometry.vertices ) {
-	console.log(vertex)
-	// const x = (Math.random()*100)-(100/2)
-	// const y = (Math.random()*100)-(100/2)
-	// const z =
-	// vertex.z = (Math.random()*1)-1
-	// vertex.set( x, y, 0 )
-}
-
-// plane.geometry.verticesNeedUpdate = true;
 
 function render() {
 	requestAnimationFrame( render )
 	stats.begin()
 
-
-
+	for ( let object of objects ) {
+		object.render()
+	}
 
 	// for ( var i = 0, l = cube.geometry.vertices.length; i < l; i ++ ) {
 	// 	// geometry.vertices[ i ].y = 35 * Math.sin( i / 5 + ( tick + i ) / 7 );
 	// 	// geometry.vertices[i].multiplyScalar(1.001);
 	// }
 	// geometry.verticesNeedUpdate = true;
-	// 1476316698624
+
 	// camera.lookAt(cube.position);
-	// camera.rotation.x = 0;
+	// console.log( 0.1*Math.sin( time*0.1 ) )
 
-	// plane.rotation.z += 0.0001;
-	// plane.rotation.x = 0.1*Math.sin(tick*0.05);
-	// plane.rotation.y = 0.1*Math.sin(tick*0.04);
-
-	// cube.rotation.x += 0.01;
-	// cube.rotation.y += 0.1;
-	// cube.position.x = width * Math.sin(tick*speed);
-	// cube.position.y = width * Math.sin(tick*speed + 90);
-
-	// cube.scale.x = tick * xGrow;
-	// cube.scale.y = tick * yGrow;
-	//console.log(Math.sin(time*0.1))
-
+	controls.update()
 	renderer.render( scene, camera )
 	tick++
-	controls.update();
 	stats.end()
 }
 requestAnimationFrame( render )
 
 function onWindowResize() {
-	camera.aspect = window.innerWidth / window.innerHeight;
-	camera.updateProjectionMatrix();
-	renderer.setSize( window.innerWidth, window.innerHeight );
+	camera.aspect = window.innerWidth / window.innerHeight
+	camera.updateProjectionMatrix()
+	renderer.setSize( window.innerWidth, window.innerHeight )
 }
-window.addEventListener( 'resize', onWindowResize, false );
+window.addEventListener( 'resize', onWindowResize, false )
