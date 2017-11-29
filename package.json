@@ -1,5 +1,5 @@
 {
-  "name": "threejs-sandbox-vanilla",
+  "name": "threejs-sandbox",
   "version": "1.0.0",
   "description": "",
   "main": "webpack.config.js",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jbjw/threejs-sandbox-vanilla.git"
+    "url": "git+https://github.com/jbjw/threejs-sandbox.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jbjw/threejs-sandbox-vanilla/issues"
+    "url": "https://github.com/jbjw/threejs-sandbox/issues"
   },
-  "homepage": "https://github.com/jbjw/threejs-sandbox-vanilla#readme",
+  "homepage": "https://github.com/jbjw/threejs-sandbox#readme",
   "devDependencies": {
     "express": "^4.15.3"
   }
