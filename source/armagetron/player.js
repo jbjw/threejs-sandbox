@@ -7,7 +7,7 @@ if ( ! ( "Game" in window ) ) {
 	console.log("window.Game not found, creating")
 }
 
-window.Game.Player = function Player(args) {
+window.Game.Player = function Player( args ) {
 	this.mesh = new THREE.Mesh(
 		new THREE.ConeGeometry( 10, 20, utils.randomInt(5, 50) ),
 		new THREE.MeshBasicMaterial( { color: args.color, wireframe: true, side: THREE.DoubleSide } ),
@@ -45,25 +45,46 @@ window.Game.Player = function Player(args) {
 		}
 	}
 
+	this.tail = []
+	this.tail.push( this.mesh.position.clone() )
+
 	this.turn = function ( angle ) {
 		this.mesh.rotateY( -angle )
+		// this.tail.push( this.mesh.position.clone() )
 	}
 
 	document.addEventListener("keydown", function (e) {
-		// console.log(_this)
 		_this.handleKeydown.call(_this, e)
 	} )
+
+	this.v = new THREE.Vector3( 0, -1, 0 )
+	this.v.applyEuler( this.mesh.rotation )
+
+	this.raycaster = new THREE.Raycaster()
 
 	this.update = function (dt = 10) {
 		var seconds = dt / 1000
 		var displacement = 2
 		// this.speed += Math.min( this.speed, 0.1 )
-		this.mesh.position.add(this.mesh.getWorldDirection().multiplyScalar(this.speed * seconds))
+		this.mesh.position.add( this.mesh.getWorldDirection().multiplyScalar( this.speed * seconds ) )
+
+		this.raycaster.set( this.mesh.position.clone().add( new THREE.Vector3( 0, 100000, 0 ) ), this.v )
+
+		var intersections = this.raycaster.intersectObject( ground )
+		var intersection = intersections[ 0 ]
+		var f = intersection.face
+		if ( intersection ) {
+			// console.log( intersection.face.normal )
+			var nv = new THREE.Vector3( f.normal.x, f.normal.y, f.normal.z )
+			// var nv = new THREE.Vector3( f.normal.x, -f.normal.z, f.normal.y )
+			var r = new THREE.Euler().setFromVector3( nv )
+			this.mesh.rotation.copy( r )
+
+			this.mesh.position.copy( intersection.point.clone().add( new THREE.Vector3( 0, 10, 0 ) ) )
+		}
 	}
 
 	this.updateControls = function () {
-		// console.
-		// has a gamepad?
 		if ( typeof this.gamepad != "undefined" ) {
 
 			// 6, 7 l r throttle
@@ -97,9 +118,5 @@ window.Game.Player = function Player(args) {
 				}
 			}
 		}
-
-		// if ( !e.repeat ) {
-
-		// }
 	}
 }

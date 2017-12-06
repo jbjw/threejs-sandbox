@@ -1,53 +1,32 @@
 //
 
-"use strict";
+"use strict"
 
-// 2*PI
-// 1*PI
-// 0.5*PI
 const PI = Math.PI
-function toRad (deg) {
-	return deg * ( 2 * PI / 360 )
-}
 
 const SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight
 const FOV = 75
 const ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT
 const NEAR = 0.1, FAR = 100000
 
-
 const scene = new THREE.Scene()
 const renderer = new THREE.WebGLRenderer( { antialias: true } )
-renderer.setPixelRatio( window.devicePixelRatio );
+renderer.setPixelRatio( window.devicePixelRatio )
 renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT )
 document.body.appendChild( renderer.domElement )
 
+const stats = new Stats()
+stats.showPanel( 0 )
+document.body.appendChild( stats.dom )
 
-
-const statsFPS = new Stats()
-statsFPS.showPanel( 0 )
-document.body.appendChild( statsFPS.dom )
-
-const statsMS = new Stats()
-statsMS.showPanel( 0 )
-document.body.appendChild( statsMS.dom )
-
-const statsMB = new Stats()
-statsMB.showPanel( 0 )
-document.body.appendChild( statsMB.dom )
-
-
-var loader = new THREE.CubeTextureLoader();
-loader.setPath( 'textures/space-cube/' );
+var loader = new THREE.CubeTextureLoader()
+loader.setPath( '../../assets/cube_textures/space-cube/' )
 
 var textureCube = loader.load( [
-	"l.png", "r.png",
-	"t.png", "b.png",
-	"rr.png", "c.png",
-	// 'px.png', 'nx.png',
-	// 'py.png', 'ny.png',
-	// 'pz.png', 'nz.png'
-] );
+	"l.png", "r.png", // 'px.png', 'nx.png',
+	"t.png", "b.png", // 'py.png', 'ny.png',
+	"rr.png", "c.png", // 'pz.png', 'nz.png',
+] )
 
 var material = new THREE.MeshBasicMaterial( { color: 0xffffff, envMap: textureCube } );
 scene.background = textureCube
@@ -58,67 +37,25 @@ document.addEventListener( "keydown", function (e) {
 	}
 } )
 
-var gamepads = []
+const gamepadManager = new Game.GamepadManager( onGamepadConnect, onGamepadDisconnect )
 
-window.addEventListener( "gamepadconnected", function( e ) {
-	gamepads[e.gamepad.index] = new Game.Gamepad(e.gamepad)
-	linkGamepads()
-	console.log(`connected ${e.gamepad}`)
-	// console.log(`connected ${e.gamepad.index} ${e.gamepad.id} ${e.gamepad.buttons.length} ${e.gamepad.axes.length}`)
-	console.log(gamepads)
-} )
+function onGamepadConnect( gamepad ) {
+	updateGamepads()
+}
 
-window.addEventListener( "gamepaddisconnected", function( e ) {
-	linkGamepads()
-	delete gamepads[e.gamepad.index]
-	console.log(`disconnected ${e.gamepad}`)
-	// console.log(`disconnected ${e.gamepad.index} ${e.gamepad.id} ${e.gamepad.buttons.length} ${e.gamepad.axes.length}`)
-	console.log(gamepads)
-} )
+function onGamepadDisconnect( gamepad ) {
+	updateGamepads()
+}
 
-function linkGamepads () {
-	for ( let i = 0; i < players.length; i++ ) {
-
-		const player = players[i]
-		// console.log(player.gamepadControls)
-		// console.log(gamepads[player.gamepadIndex])
-		player.gamepad = gamepads[player.gamepadIndex]
-		console.log(`looking for player ${i}'s controller`)
+function updateGamepads() {
+	for ( let player of players ) {
+		player.gamepad = gamepadManager.gamepads[player.gamepadIndex]
 	}
-	// for ( let player of player ) {
-	// 	player.gamepad = gamepads
-	// }
 }
 
 var objects = []
 
-// console.log(utils.randomColor())
-
-// setInterval( function () {
-// 	// console.log(gamepads)
-// 	// console.log(navigator.getGamepads())
-// }, 1000)
-
-// setTimeout( function () {
-// 	for ( let view of views ) {
-// 		// console.log(view)
-// 		view.update()
-// 	}
-// }, 1000 )
-
-// physics loop
-// setInterval( function () {
-// 	for ( let object of objects ) {
-// 		object.update()
-// 	}
-// }, 10 )
-
-// control loop
 setInterval( function () {
-	for ( let gamepad of gamepads ) {
-		// console.log(gamepad)
-		gamepad.update()
-	}
 	for ( let object of objects ) {
 		object.update()
 		object.updateControls()
@@ -127,56 +64,14 @@ setInterval( function () {
 
 let players = [
 	new Game.Player( {
-		startPos: new THREE.Vector3( 25, 10, 25 ),
+		startPos: new THREE.Vector3( 25, 500, 25 ),
 		startAngle: new THREE.Euler( -0.5*PI, 0, -0.5*PI ),
-		color: utils.randomColor(),
-		controls: {
-			"*": "left",
-			"-": "right",
-		},
-		gamepadIndex: 0,
-		gamepadControls: {
-			4: "left",
-			5: "right",
-		},
-	} ),
-	new Game.Player( {
-		startPos: new THREE.Vector3( -25, 10, 25 ),
-		startAngle: new THREE.Euler( 0.5*PI, 0, -0.5*PI ),
-		color: utils.randomColor(),
-		controls: {
-			"[": "left",
-			"]": "right",
-		},
-		gamepadIndex: 1,
-		gamepadControls: {
-			4: "left",
-			5: "right",
-		},
-	} ),
-	new Game.Player( {
-		startPos: new THREE.Vector3( 25, 10, -25 ),
-		startAngle: new THREE.Euler( -0.5*PI, 0, 0.5*PI ),
-		color: utils.randomColor(),
-		controls: {
-			"ArrowLeft": "left",
-			"ArrowRight": "right",
-		},
-		gamepadIndex: 2,
-		gamepadControls: {
-			4: "left",
-			5: "right",
-		},
-	} ),
-	new Game.Player( {
-		startPos: new THREE.Vector3( -25, 10, -25 ),
-		startAngle: new THREE.Euler( 0.5*PI, 0, 0.5*PI ),
 		color: utils.randomColor(),
 		controls: {
 			"a": "left",
 			"d": "right",
 		},
-		gamepadIndex: 3,
+		gamepadIndex: 0,
 		gamepadControls: {
 			4: "left",
 			5: "right",
@@ -225,26 +120,9 @@ function updateCamera() {
 
 const views = [
 	{
-		left: 0, top: 0, width: 0.5, height: 0.5,
-		// left: 0, top: 0, width: 0.5, height: 1,
+		left: 0, top: 0, width: 1.0, height: 1.0,
 		update: updateCamera,
 		player: players[0],
-	},
-	{
-		left: 0.5, top: 0, width: 0.5, height: 0.5,
-		update: updateCamera,
-		player: players[1],
-	},
-	{
-		// left: 0, top: 0.5, width: 0.5, height: 0.5,
-		left: 0, top: 0.5, width: 0.5, height: 0.5,
-		update: updateCamera,
-		player: players[2],
-	},
-	{
-		left: 0.5, top: 0.5, width: 0.5, height: 0.5,
-		update: updateCamera,
-		player: players[3],
 	},
 ]
 
@@ -294,19 +172,39 @@ for ( let i = 0; i < 100; i++ ) {
 // var cylinder = new THREE.Mesh( geometry, material );
 // scene.add( cylinder );
 
-var plane = new THREE.Mesh(
-	new THREE.PlaneGeometry( 100000, 100000, 1, 1 ),
-	new THREE.MeshBasicMaterial( {
-		color: 0x00ff00,
-		opacity: 0.1,
-		transparent: true,
-		wireframe: false,
-		side: THREE.DoubleSide
+var ambientLight = new THREE.AmbientLight( 0x404040 )
+scene.add( ambientLight )
+
+var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 )
+scene.add( directionalLight )
+directionalLight.position.set( 100, 100, 100 )
+
+var grassTexture = new THREE.TextureLoader().load( '../../assets/textures/grass.jpg' );
+grassTexture.repeat.set( 100, 100 )
+grassTexture.wrapS = THREE.RepeatWrapping
+grassTexture.wrapT = THREE.RepeatWrapping
+
+var ground = new THREE.Mesh(
+	new THREE.PlaneGeometry( 100000, 100000, 100, 100 ),
+	new THREE.MeshLambertMaterial( {
+		// color: 0x00ff00,
+		// opacity: 0.1,
+		// transparent: false,
+		// wireframe: true,
+		map: grassTexture,
+		side: THREE.DoubleSide,
 	} ),
 )
-scene.add( plane )
-plane.rotation.x = Math.PI/2
+scene.add( ground )
+ground.rotation.x = Math.PI/2
 
+
+for ( let vertex of ground.geometry.vertices ) {
+	vertex.z = utils.randomInt( -500, 500 )
+}
+ground.geometry.verticesNeedUpdate = true
+ground.geometry.normalsNeedUpdate = true
+ground.geometry.computeFaceNormals()
 // var axisHelper = new THREE.AxisHelper( 5 )
 // scene.add( axisHelper )
 
@@ -317,9 +215,7 @@ var gridHelper = new THREE.GridHelper( 100000, 1000, colorCenterLine, colorGrid 
 scene.add( gridHelper )
 
 function render() {
-	statsFPS.begin()
-	statsMS.begin()
-	statsMB.begin()
+	stats.begin()
 	const SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight
 	for ( let view of views ) {
 		view.update()
@@ -341,9 +237,7 @@ function render() {
 		renderer.render( scene, view.camera )
 	}
 
-	statsFPS.end()
-	statsMS.end()
-	statsMB.end()
+	stats.end()
 	// controls.update()
 
 	requestAnimationFrame( render )
