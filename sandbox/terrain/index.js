@@ -153,8 +153,8 @@ function setup() {
 		// console.log( ground.geometry.needsUpdate )
 
 		// ground.position.y = 5
-		x += 0.1005, y += 0.1005
-	}, 1000 )
+		x += 0.0015, y += 0.0015
+	}, 10 )
 }
 
 scene.add( ground )
