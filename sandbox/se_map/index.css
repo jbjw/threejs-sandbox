@@ -1,3 +1,37 @@
+
+
+
+.float {
+	position: absolute;
+	/*width: 10%;
+	height: 90%;*/
+
+}
+
+#left-panel {
+	top: 10px;
+	bottom: 10px;
+	left: 10px;
+}
+
+#right-panel {
+	top: 10px;
+	bottom: 10px;
+	left: 10px;
+}
+
+#top-panel {
+	top: 10px;
+	bottom: 10px;
+	left: 10px;
+}
+
+#bottom-panel {
+	top: 10px;
+	bottom: 10px;
+	left: 10px;
+}
+
 body:-moz-full-screen {
 	background-color: pink;
 }

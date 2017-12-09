@@ -1,8 +1,9 @@
 
 // http://steamcommunity.com/workshop/filedetails/?id=851245392
 
+
+
 bodies = [
-	// fix coords
 	{ // light blue gas giant
 		name: "Neiru",
 		category: "planet",

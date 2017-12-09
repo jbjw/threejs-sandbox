@@ -8,6 +8,11 @@ Array.prototype.choose = function () {
 	return this[Math.floor(Math.random() * this.length)]
 }
 
+// choose and weighted choose
+var colors = ["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#CCFFFF", "#CCCCFF", "#FFCCCC"]
+// var colors = ["#AAAAAA"]
+var weights = [0.9, 0.4, 0.4, 0.4]
+
 utils.Vec2 = function Vec2(x, y) {
 	this.x = x, this.y = y
 }
@@ -53,10 +58,14 @@ utils.unwrapArray = function unwrapArray(arr) {
 	return newArr
 }
 
-utils.randomInt = function randomInt(min, max) {
+utils.randomInt = function randomInt( min, max ) {
 	min = Math.ceil(min);
 	max = Math.floor(max);
-	return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
+	return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+utils.random = function random( min, max ) {
+	return Math.random() * (max - min) + min
 }
 
 utils.randomColor = function randomColor() {
