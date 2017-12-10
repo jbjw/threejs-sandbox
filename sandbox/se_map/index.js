@@ -196,19 +196,19 @@ function Body(args) {
 	this.mesh = new THREE.Mesh(
 		new THREE.SphereGeometry( args.radius, 32, 32 ),
 		// new THREE.BoxGeometry( 4, 4, 1, 1 ),
-		new THREE.MeshBasicMaterial({color: args.color, wireframe: false, side: THREE.DoubleSide}),
+		new THREE.MeshBasicMaterial( { color: args.color, wireframe: false, side: THREE.DoubleSide } ),
 		// new THREE.MeshBasicMaterial( { color: 0x00aa00, wireframe: false, side: THREE.DoubleSide } ),
 	)
 
-	this.mesh.position.copy(convertCoords(parseCoords(args.coords)))
-	scene.add(this.mesh)
+	this.mesh.position.copy( convertCoords( parseCoords( args.coords ) ) )
+	scene.add( this.mesh )
 
-	this.label = new Label({
+	this.label = new Label( {
 		text: args.name,
-	})
-	scene.add(this.label.sprite)
+	} )
+	scene.add( this.label.sprite )
 
-	this.label.sprite.position.addVectors(this.mesh.position, new THREE.Vector3(0, 0, 0))
+	this.label.sprite.position.addVectors( this.mesh.position, new THREE.Vector3( 0, 0, 0 ) )
 
 	// this.group = new THREE.Group()
 	// this.group.add( this.mesh );
