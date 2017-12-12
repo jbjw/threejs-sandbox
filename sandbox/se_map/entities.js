@@ -13,7 +13,7 @@ entities = [
 		owner: "GSI",
 		specialty: "starter stuff",
 	},
-	{
+	{H56GC3
 		name: "Neiru",
 		category: "planet",
 		desc: "light blue gas giant",
