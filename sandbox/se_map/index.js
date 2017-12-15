@@ -18,24 +18,6 @@ document.addEventListener("keyup", function (e) {
 	// console.log(keyboardState)
 })
 
-
-
-// var myImageData = ctx.createImageData(textureCanvas.width, textureCanvas.height) // blank
-
-// var myImageData = ctx.getImageData(left, top, width, height) // copy
-
-// ctx.putImageData(myImageData, 0, 0) // set
-
-var skyboxCanvas = document.createElement("canvas")
-var ctx = skyboxCanvas.getContext("2d")
-
-var skyboxWidth = 8192
-var skyboxHeight = 8192
-// 1024 2048 4096 8192
-
-skyboxCanvas.width = skyboxWidth
-skyboxCanvas.height = skyboxHeight
-
 const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 100000 )
 // const camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, -10, 1000 )
@@ -107,42 +89,60 @@ const controls = new THREE.OrbitControls(camera)
 
 // ctx.fillRect(5, 5, 400, 400)
 
-// for (let i = 0; i < 1000; i++) {
-// 	ctx.beginPath()
-// 	ctx.ellipse(randint(0, skyboxWidth), randint(0, skyboxHeight), randint(1, 5), randint(1, 5), 45 * Math.PI*2/360, 0, 2 * Math.PI)
-// 	ctx.fillStyle = colors.choose()
-// 	ctx.fill()
-// }
+
+
+// var myImageData = ctx.createImageData(textureCanvas.width, textureCanvas.height) // blank
+
+// var myImageData = ctx.getImageData(left, top, width, height) // copy
+
+// ctx.putImageData(myImageData, 0, 0) // set
+
+var skyboxCanvas = document.createElement("canvas")
+var ctx = skyboxCanvas.getContext("2d")
+
+var skyboxWidth = 8192
+var skyboxHeight = 8192
+// 1024 2048 4096 8192
+
+skyboxCanvas.width = skyboxWidth
+skyboxCanvas.height = skyboxHeight
+
+for (let i = 0; i < 1000; i++) {
+	ctx.beginPath()
+	ctx.ellipse(utils.randomInt(0, skyboxWidth), utils.randomInt(0, skyboxHeight), utils.randomInt(1, 5), utils.randomInt(1, 5), 45 * Math.PI*2/360, 0, 2 * Math.PI)
+	ctx.fillStyle = colors.choose()
+	ctx.fill()
+}
+
+var skyboxTexture = new THREE.CanvasTexture(skyboxCanvas)
+var skyboxTexture = new THREE.Texture(skyboxCanvas)
+skyboxTexture.needsUpdate = true
+
+var skybox = new THREE.Mesh(
+	new THREE.SphereGeometry( 10000, 32, 32 ),
+	// color: 0x00ff00,
+	new THREE.MeshBasicMaterial( { map: skyboxTexture, side: THREE.DoubleSide } ),
+)
+scene.add( skybox )
+
+// var loader = new THREE.CubeTextureLoader()
+// loader.setPath( '../../assets/cube_textures/space-cube/' )
 //
-// var skyboxTexture = new THREE.CanvasTexture(skyboxCanvas)
-// var skyboxTexture = new THREE.Texture(skyboxCanvas)
-// skyboxTexture.needsUpdate = true
-
-// var skybox = new THREE.Mesh(
-// 	new THREE.SphereGeometry( 10000, 32, 32 ),
-// 	// color: 0x00ff00,
-// 	new THREE.MeshBasicMaterial( { map: skyboxTexture, side: THREE.DoubleSide } ),
-// )
-// scene.add( skybox )
-
-var loader = new THREE.CubeTextureLoader()
-loader.setPath( '../../assets/cube_textures/space-cube/' )
-
-var textureCube = loader.load( [
-	"r.png", "l.png", // 'px.png', 'nx.png',
-	"t.png", "b.png", // 'py.png', 'ny.png',
-	"c.png", "rr.png", // 'pz.png', 'nz.png',
-] )
-
-var material = new THREE.MeshBasicMaterial( { color: 0xffffff, envMap: textureCube } );
-scene.background = textureCube
+// var textureCube = loader.load( [
+// 	"r.png", "l.png", // 'px.png', 'nx.png',
+// 	"t.png", "b.png", // 'py.png', 'ny.png',
+// 	"c.png", "rr.png", // 'pz.png', 'nz.png',
+// ] )
+// // console.log( textureCube )
+// var material = new THREE.MeshBasicMaterial( { color: 0xffff00, envMap: textureCube } )
+// scene.background = textureCube
 
 let objects = []
 
-function parseCoords(coords) {
-	var result = coords.split(":")
-	var name = result[1]
-	return new THREE.Vector3(result[2], result[3], result[4])
+function parseCoords( coords ) {
+	var result = coords.split( ":" )
+	var name = result[ 1 ]
+	return new THREE.Vector3( result[2], result[3], result[4] )
 }
 
 var originVec
