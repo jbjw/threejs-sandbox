@@ -20,7 +20,7 @@ entities = [
 		// desc: "light blue gas giant",
 		coords: "GPS:Body Ter-4:0:0:0:",
 		// color: new THREE.Color("rgb(0, 153, 255)"),
-		// radius: 120000/2,
+		radius: 120000/2,
 
 		// oxygen: "none",
 		// gravity: 3.2,
@@ -32,7 +32,7 @@ entities = [
 		// desc: "light blue gas giant",
 		coords: "GPS:Body Sirius:1430000:-290000:0:",
 		// color: new THREE.Color("rgb(0, 153, 255)"),
-		// radius: 120000/2,
+		radius: 120000/2,
 
 		// oxygen: "none",
 		// gravity: 3.2,
@@ -43,7 +43,7 @@ entities = [
 		// desc: "light blue gas giant",
 		coords: "GPS:Body Midas:11000000:0:-200000:",
 		// color: new THREE.Color("rgb(0, 153, 255)"),
-		// radius: 120000/2,
+		radius: 120000/2,
 
 		// oxygen: "none",
 		// gravity: 3.2,
@@ -54,7 +54,7 @@ entities = [
 		// desc: "bumpy dark grey moon",
 		coords: "GPS:Body Phrygia:10000000:530000:-600000:",
 		// color: new THREE.Color("rgb(100, 100, 100)"),
-		// radius: 19000/2,
+		radius: 19000/2,
 
 		orbits: "Midas",
 		// oxygen: "none",
@@ -66,7 +66,7 @@ entities = [
 		// desc: "light blue gas giant",
 		coords: "GPS:Body Selene:0:0:-15000000:",
 		// color: new THREE.Color("rgb(0, 153, 255)"),
-		// radius: 120000/2,
+		radius: 120000/2,
 
 		// oxygen: "none",
 		// gravity: 3.2,
@@ -78,7 +78,7 @@ entities = [
 		// desc: "light blue gas giant",
 		coords: "GPS:Planet Imok:841000:480000:-14956883:",
 		// color: new THREE.Color("rgb(0, 153, 255)"),
-		// radius: 120000/2,
+		radius: 120000/2,
 
 		// oxygen: "none",
 		// gravity: 3.2,

@@ -1,32 +1,17 @@
 //
 
-"use strict";
-
-var keyboardState = {}
-
-document.addEventListener("keypress", function (e) {
-	console.log("key pressed")
-	console.log(e.key)
-})
-
-document.addEventListener("keydown", function (e) {
-	keyboardState[e.key] = true
-})
-
-document.addEventListener("keyup", function (e) {
-	keyboardState[e.key] = false
-	// console.log(keyboardState)
-})
+"use strict"
 
 const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 100000 )
 // const camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, -10, 1000 )
-scene.add(camera)
+scene.add( camera )
 camera.position.set( 5, 3, 5 )
 
+// const renderer = new THREE.WebGLRenderer( { alpha: true } )
 const renderer = new THREE.WebGLRenderer()
-renderer.setSize(window.innerWidth, window.innerHeight)
-document.body.appendChild(renderer.domElement)
+renderer.setSize( window.innerWidth, window.innerHeight )
+document.body.appendChild( renderer.domElement )
 
 // document.addEventListener("click", function () {
 // 	document.documentElement.webkitRequestFullscreen()
@@ -63,22 +48,7 @@ fullscreenButton.addEventListener("click", function () {
 	toggleFullScreen()
 })
 
-// console.log(window.getComputedStyle(fullscreenButton, null))
-// webkitRequestFullScreen
-// mozRequestFullScreen
-
-// renderer.domElement.requestFullscreen()
-
 const controls = new THREE.OrbitControls(camera)
-// // controls.enablePan = false;
-// controls.keyPanSpeed = 70
-// // controls.enableZoom = false;
-// controls.zoomSpeed = 1
-// controls.autoRotate = true;
-// controls.autoRotateSpeed = 0.5;
-// controls.enableDamping = true;
-// controls.dampingFactor = 0.25;
-// controls.enableRotate = false;
 
 // var texture = new THREE.TextureLoader().load("../assets/360images/sky.jpg")
 // texture.wrapS = THREE.RepeatWrapping;
@@ -89,53 +59,79 @@ const controls = new THREE.OrbitControls(camera)
 
 // ctx.fillRect(5, 5, 400, 400)
 
-
-
 // var myImageData = ctx.createImageData(textureCanvas.width, textureCanvas.height) // blank
 
 // var myImageData = ctx.getImageData(left, top, width, height) // copy
 
 // ctx.putImageData(myImageData, 0, 0) // set
 
-var skyboxCanvas = document.createElement("canvas")
-var ctx = skyboxCanvas.getContext("2d")
+const colors = [
+	"#FFFFFF",
+	// "#FFFFFF",
+	// "#FFFFFF",
+	"#FFCCCC",
+	"#CCFFFF",
+	"#CCCCFF",
+]
+// const colors = [
+// 	new THREE.Color( "#FFFFFF" ),
+// 	new THREE.Color( "#CCCCFF" ),
+// 	new THREE.Color( "#FFCCCC" ),
+// 	new THREE.Color( "#CCFFFF" ),
+// ]
 
-var skyboxWidth = 8192
-var skyboxHeight = 8192
-// 1024 2048 4096 8192
-
-skyboxCanvas.width = skyboxWidth
-skyboxCanvas.height = skyboxHeight
-
-for (let i = 0; i < 1000; i++) {
-	ctx.beginPath()
-	ctx.ellipse(utils.randomInt(0, skyboxWidth), utils.randomInt(0, skyboxHeight), utils.randomInt(1, 5), utils.randomInt(1, 5), 45 * Math.PI*2/360, 0, 2 * Math.PI)
-	ctx.fillStyle = colors.choose()
-	ctx.fill()
-}
-
-var skyboxTexture = new THREE.CanvasTexture(skyboxCanvas)
-var skyboxTexture = new THREE.Texture(skyboxCanvas)
-skyboxTexture.needsUpdate = true
-
-var skybox = new THREE.Mesh(
-	new THREE.SphereGeometry( 10000, 32, 32 ),
-	// color: 0x00ff00,
-	new THREE.MeshBasicMaterial( { map: skyboxTexture, side: THREE.DoubleSide } ),
-)
-scene.add( skybox )
-
-// var loader = new THREE.CubeTextureLoader()
-// loader.setPath( '../../assets/cube_textures/space-cube/' )
+// var skyboxCanvas = document.createElement( "canvas" )
+// var ctx = skyboxCanvas.getContext( "2d" )
 //
-// var textureCube = loader.load( [
-// 	"r.png", "l.png", // 'px.png', 'nx.png',
-// 	"t.png", "b.png", // 'py.png', 'ny.png',
-// 	"c.png", "rr.png", // 'pz.png', 'nz.png',
-// ] )
-// // console.log( textureCube )
-// var material = new THREE.MeshBasicMaterial( { color: 0xffff00, envMap: textureCube } )
-// scene.background = textureCube
+// var skyboxWidth = 1024
+// var skyboxHeight = 1024
+// // 1024 2048 4096 8192
+//
+// skyboxCanvas.width = skyboxWidth
+// skyboxCanvas.height = skyboxHeight
+//
+// ctx.fillStyle = "#000000"
+// ctx.fillRect( 0, 0, 1024, 1024 )
+
+// for ( let i = 0; i < 100; i++ ) {
+// 	ctx.beginPath()
+// 	ctx.ellipse(
+// 		utils.randomInt( 0, skyboxWidth ), utils.randomInt( 0, skyboxHeight ),
+// 		utils.randomInt( 1, 5 ), utils.randomInt( 1, 5 ),
+// 		45 * Math.PI * 2 / 360, 0, 2 * Math.PI
+// 	)
+// 	ctx.fillStyle = colors.choose()
+// 	ctx.fill()
+// 	console.log( ctx.fillStyle )
+// }
+//
+// var skyboxTexture = new THREE.CanvasTexture( skyboxCanvas )
+// // var skyboxTexture = new THREE.Texture( skyboxCanvas )
+// skyboxTexture.needsUpdate = true
+//
+// var skybox = new THREE.Mesh(
+// 	new THREE.SphereGeometry( 100, 32, 32 ),
+// 	new THREE.MeshBasicMaterial( {
+// 		map: skyboxTexture,
+// 		// color: 0x000000,
+// 		side: THREE.DoubleSide,
+// 	} ),
+// )
+// scene.add( skybox )
+
+var loader = new THREE.CubeTextureLoader()
+loader.setPath( '../../assets/cube_textures/space-cube/' )
+
+var textureCube = loader.load( [
+	"r.png", "l.png", // 'px.png', 'nx.png',
+	"t.png", "b.png", // 'py.png', 'ny.png',
+	"c.png", "rr.png", // 'pz.png', 'nz.png',
+] )
+// console.log( textureCube )
+var material = new THREE.MeshBasicMaterial( { color: 0xffff00, envMap: textureCube } )
+scene.background = textureCube
+
+// scene.background = new THREE.Color( 0x0000ff )
 
 let objects = []
 
@@ -276,30 +272,31 @@ function Ship( args ) {
 for ( let entity of entities ) {
 	switch ( entity.category ) {
 		case "station":
-			var tmp = new Station({
-				color: utils.chooseColor(),
+			var tmp = new Body( {
+				// color: utils.chooseColor(),
+				color: new THREE.Color( entity.color ),
 				radius: entity.radius * scale,
 				coords: entity.coords,
 				name: entity.tag,
-			})
+			} )
 			objects.push( tmp )
 			break
 		case "planet":
-			var tmp = new Body({
-				color: new THREE.Color(entity.color),
-				radius: entity.radius * scale,
-				coords: entity.coords,
-				name: entity.name,
-			})
-			objects.push( tmp )
-			break
-		case "moon":
-			var tmp = new Body({
+			var tmp = new Body( {
 				color: new THREE.Color( entity.color ),
 				radius: entity.radius * scale,
 				coords: entity.coords,
 				name: entity.name,
-			})
+			} )
+			objects.push( tmp )
+			break
+		case "moon":
+			var tmp = new Body( {
+				color: new THREE.Color( entity.color ),
+				radius: entity.radius * scale,
+				coords: entity.coords,
+				name: entity.name,
+			} )
 			objects.push( tmp )
 
 			// var material = new THREE.LineBasicMaterial({

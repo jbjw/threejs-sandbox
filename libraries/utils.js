@@ -5,13 +5,13 @@ console.log("utils.js loaded")
 var utils = {}
 
 Array.prototype.choose = function () {
-	return this[Math.floor(Math.random() * this.length)]
+	return this[ Math.floor( Math.random() * this.length ) ]
 }
 
 // choose and weighted choose
-var colors = ["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#CCFFFF", "#CCCCFF", "#FFCCCC"]
+// var colors = ["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#CCFFFF", "#CCCCFF", "#FFCCCC"]
 // var colors = ["#AAAAAA"]
-var weights = [0.9, 0.4, 0.4, 0.4]
+// var weights = [0.9, 0.4, 0.4, 0.4]
 
 utils.Vec2 = function Vec2(x, y) {
 	this.x = x, this.y = y
