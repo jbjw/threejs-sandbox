@@ -39,7 +39,7 @@ function httpsRedirect(req, res, next) {
 const app = express()
 
 app.use( log )
-app.use(express.static('./sandbox', {index: 'index.html'}))
+app.use(express.static('.', {index: 'index.html'}))
 // app.use( httpsRedirect )
 
 const httpServer = http.createServer( app );
