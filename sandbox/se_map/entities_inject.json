@@ -1,7 +1,4 @@
-//
-
-
-entities = [
+[
 	{
 		name: "Galactic Trading Hub",
 		category: "station",
