@@ -20,9 +20,9 @@ function dump( path, json ) {
 var items = []
 
 for ( let raw of raws ) {
-	var tmp = {}
-	tmp.
+	const tmp = Object.assign( {}, raw )
+	tmp.category = "asteroid"
 	items.push( tmp )
 }
 
-dump( "entites.json", items )
+dump( "entities.json", items )
