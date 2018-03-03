@@ -1,6 +1,6 @@
 // express server
 
-'use strict';
+"use strict"
 
 var url = require('url');
 var path = require('path');
@@ -37,6 +37,23 @@ function httpsRedirect(req, res, next) {
 }
 
 const app = express()
+
+// wiki.js - Wiki route module
+
+var express = require('express');
+var router = express.Router();
+
+// Home page route
+router.get('/', function(req, res) {
+  res.send('Wiki home page');
+});
+
+// About page route
+router.get('/about', function(req, res) {
+  res.send('About this wiki');
+});
+
+// app.all vs app.use
 
 app.use( log )
 app.use(express.static('.', {index: 'index.html'}))
