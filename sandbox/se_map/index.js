@@ -2,6 +2,22 @@
 
 "use strict"
 
+var myImage = document.querySelector('img');
+
+var entities
+fetch( "entities.json" ).then( response => {
+	return response.json()
+} ).then( json => {
+	// console.log( typeof json )
+	entities = json
+	start()
+	// console.log( entities )
+	// entities = JSON.parse( json )
+	// blob.json()
+	// var objectURL = URL.createObjectURL( myBlob )
+	// myImage.src = objectURL
+} )
+
 const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 100000 )
 // const camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, -10, 1000 )
@@ -269,66 +285,80 @@ function Ship( args ) {
 // var line = new THREE.Line(geometry, material)
 // scene.add(line)
 
-for ( let entity of entities ) {
-	switch ( entity.category ) {
-		case "station":
-			var tmp = new Body( {
-				// color: utils.chooseColor(),
-				color: new THREE.Color( entity.color ),
-				radius: entity.radius * scale,
-				coords: entity.coords,
-				name: entity.tag,
-			} )
-			objects.push( tmp )
-			break
-		case "planet":
-			var tmp = new Body( {
-				color: new THREE.Color( entity.color ),
-				radius: entity.radius * scale,
-				coords: entity.coords,
-				name: entity.name,
-			} )
-			objects.push( tmp )
-			break
-		case "moon":
-			var tmp = new Body( {
-				color: new THREE.Color( entity.color ),
-				radius: entity.radius * scale,
-				coords: entity.coords,
-				name: entity.name,
-			} )
-			objects.push( tmp )
+function start() {
+	console.log( entities )
+	for ( let entity of entities ) {
+		console.log( entity )
+		switch ( entity.category ) {
+			case "asteroid":
+				var tmp = new Body( {
+					// color: utils.chooseColor(),
+					color: new THREE.Color( "gray" ),
+					radius: entity.radius * scale,
+					coords: entity.coords,
+					name: entity.tag,
+				} )
+				objects.push( tmp )
+				break
+			case "station":
+				var tmp = new Body( {
+					// color: utils.chooseColor(),
+					color: new THREE.Color( entity.color ),
+					radius: entity.radius * scale,
+					coords: entity.coords,
+					name: entity.tag,
+				} )
+				objects.push( tmp )
+				break
+			case "planet":
+				var tmp = new Body( {
+					color: new THREE.Color( entity.color ),
+					radius: entity.radius * scale,
+					coords: entity.coords,
+					name: entity.name,
+				} )
+				objects.push( tmp )
+				break
+			case "moon":
+				var tmp = new Body( {
+					color: new THREE.Color( entity.color ),
+					radius: entity.radius * scale,
+					coords: entity.coords,
+					name: entity.name,
+				} )
+				objects.push( tmp )
 
-			// var material = new THREE.LineBasicMaterial({
-			// 	color: 0x0000ff
-			// });
-			// var material = new THREE.LineBasicMaterial({
-			// 	// color: 0xffffff,
-			// 	color: utils.randomColor(),
-			// 	linewidth: 10,
-			// })
-			var material = new THREE.LineDashedMaterial( {
-				color: utils.randomColor(),
-				linewidth: 10,
-				scale: 1,
-				dashSize: 0.1,
-				gapSize: 0.025,
-			} )
+				// var material = new THREE.LineBasicMaterial({
+				// 	color: 0x0000ff
+				// });
+				// var material = new THREE.LineBasicMaterial({
+				// 	// color: 0xffffff,
+				// 	color: utils.randomColor(),
+				// 	linewidth: 10,
+				// })
+				var material = new THREE.LineDashedMaterial( {
+					color: utils.randomColor(),
+					linewidth: 10,
+					scale: 1,
+					dashSize: 0.1,
+					gapSize: 0.025,
+				} )
 
-			var geometry = new THREE.Geometry()
+				var geometry = new THREE.Geometry()
 
-			var orbitBody = entities.find( e => e.name == entity.orbits )
+				var orbitBody = entities.find( e => e.name == entity.orbits )
 
-			geometry.vertices.push(
-				convertCoords( parseCoords( entity.coords ) ),
-				convertCoords( parseCoords( orbitBody.coords ) ),
-			)
-			geometry.computeLineDistances()
+				geometry.vertices.push(
+					convertCoords( parseCoords( entity.coords ) ),
+					convertCoords( parseCoords( orbitBody.coords ) ),
+				)
+				geometry.computeLineDistances()
 
-			var line = new THREE.Line( geometry, material )
-			scene.add( line )
+				var line = new THREE.Line( geometry, material )
+				scene.add( line )
 
-			break
+				break
+		}
 	}
 }
 
