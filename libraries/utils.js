@@ -58,14 +58,15 @@ utils.unwrapArray = function unwrapArray(arr) {
 	return newArr
 }
 
+utils.random = function random( min, max ) {
+	return Math.random() * (max - min) + min
+}
+
 utils.randomInt = function randomInt( min, max ) {
 	min = Math.ceil(min);
 	max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min + 1)) + min
-}
-
-utils.random = function random( min, max ) {
-	return Math.random() * (max - min) + min
+	// The maximum is inclusive and the minimum is inclusive
 }
 
 utils.randomColor = function randomColor() {
@@ -73,10 +74,6 @@ utils.randomColor = function randomColor() {
 	// console.log(string)
 	return new THREE.Color(string)
 }
-
-// export function randomColor() {
-// 	return new THREE.Color(`rgb(${randint(0,255)}, ${randint(0,255)}, ${randint(0,255)})`)
-// }
 
 utils.chooseColor = function chooseColor() {
 	var colors = [

@@ -4,9 +4,8 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "start": "webpack-dev-server",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "start": "http-server -c-1 -p 80 -o",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -20,6 +19,7 @@
   },
   "homepage": "https://github.com/jbjw/threejs-sandbox#readme",
   "devDependencies": {
-    "express": "^4.15.3"
+    "express": "^4.15.3",
+    "http-server": "^0.11.1"
   }
 }
