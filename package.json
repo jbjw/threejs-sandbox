@@ -2,10 +2,12 @@
   "name": "threejs-sandbox",
   "version": "1.0.0",
   "description": "",
-  "main": "webpack.config.js",
+  "private": true,
   "scripts": {
-    "start": "http-server -c-1 -p 80 -o",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start-http-server": "http-server -c-1 -p 80 -o",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "webpack-dev-server --open"
   },
   "repository": {
     "type": "git",
@@ -20,6 +22,9 @@
   "homepage": "https://github.com/jbjw/threejs-sandbox#readme",
   "devDependencies": {
     "express": "^4.15.3",
-    "http-server": "^0.11.1"
+    "http-server": "^0.11.1",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
   }
 }
